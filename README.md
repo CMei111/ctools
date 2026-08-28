@@ -1,7 +1,7 @@
 # ctools.hpp - Lightweight C++ Utility Headers
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-Indev_26.8_01-blue)](.)
+[![Version](https://img.shields.io/badge/version-Indev_26.8_02-blue)](.)
 
 **Status: 🚧 Experimental / Indev**  
 A single-header, cross-platform C++ utility library for terminal manipulation, math constants, and basic algorithms.
@@ -13,7 +13,7 @@ A single-header, cross-platform C++ utility library for terminal manipulation, m
 - 📦 **Header-only**: Just `#include "ctools.hpp"` and go.
 
 ## 📦 Version
-**Current:** `Indev 26.8_01` (API subject to breaking changes).  
+**Current:** `Indev 26.8_02` (API subject to breaking changes).  
 Check [CHANGELOG.md](./CHANGELOG.md) for details.
 
 ## 🚀 Quick Start
@@ -22,7 +22,7 @@ Check [CHANGELOG.md](./CHANGELOG.md) for details.
 #include <iostream>
 
 int main() {
-    std::cout << "ctools version: " << ctools::cmei_version_string() << std::endl;
+    std::cout << "ctools version: " << ctools::version_string() << std::endl;
     ctools::write_warning("Hello, this is a warning!");
     return 0;
 }

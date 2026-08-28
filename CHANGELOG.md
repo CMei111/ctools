@@ -1,9 +1,7 @@
-
-
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Indev 26.8_01] - 2026-08-26
+## [Indev 26.8_02] - 2026-08-26
 ### Added
 - Initial public release.
 - Core utilities: `Swap`, `Classic_Swap`, `reset_array`, `fill_array`.
@@ -13,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - Control characters: `ctrl::RED`, `ctrl::GREEN`, etc.
 - Version macro: `CMEI_HEAD_FILE_VERSION` (`Indev 26.8_01`).
 
+## [Indev 26.8_02] - 2026-08-28
+- Update version, opensource to Github.
+- Rename function cmei_version_string() to version_string().
 
 ### Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.

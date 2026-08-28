@@ -26,10 +26,10 @@ Author Tips:
 	#include <windows.h>
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.8_01"
+#define CTOOLS_VERSION_STRING "Indev 26.8_02"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x0801
+#define CTOOLS_VERSION_PATCH 0x0802
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
 
 // const
@@ -189,13 +189,27 @@ namespace ctools
         }
         return 1;
 	}
+	inline void print_progress_bar(double fraction, int bar_width = 50, std::ostream& os = std::cout) 
+	{
+        if (fraction < 0) fraction = 0;
+        if (fraction > 1) fraction = 1;
+        int filled = static_cast<int>(fraction * bar_width);
+        os << "\r[";
+        for (int i = 0; i < bar_width; ++i) 
+		{
+            os << (i < filled ? '#' : ' ');
+        }
+        os << "] " << static_cast<int>(fraction * 100) << "%";
+        if (fraction >= 1.0) os << '\n';
+        os.flush();
+    }
 	//Never call it in production environment
 	int crash_memory()
 	{
 		std::cout << "Crash......\r";
 		return never_stop();
 	}
-	inline const char* cmei_version_string()
+	inline const char* version_string()
 	{
 		return CTOOLS_VERSION_STRING;
 	}
