@@ -1,7 +1,7 @@
 # ctools.hpp - Lightweight C++ Utility Headers
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-Indev_26.8_02-blue)](.)
+[![Version](https://img.shields.io/badge/version-Indev_26.8_03-blue)](.)
 
 **Status: 🚧 Experimental / Indev**  
 A single-header, cross-platform C++ utility library for terminal manipulation, math constants, and basic algorithms.
