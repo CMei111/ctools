@@ -7,7 +7,7 @@ Author Tips:
 
 		Thanks For Using!
 
-															*#Last Edit On 08/10/2026#*
+															*#Last Edit On 08/29/2026#*
 
 
 	Open Source : MIT
@@ -21,6 +21,7 @@ Author Tips:
 #include <cstddef>
 #include <type_traits>
 #include <cstdlib>
+#include <string>
 
 #ifdef _WIN32
 	#include <windows.h>
@@ -189,17 +190,30 @@ namespace ctools
         }
         return 1;
 	}
-	inline void print_progress_bar(double fraction, int bar_width = 50, std::ostream& os = std::cout) 
+	inline void print_progress_bar(double fraction, int bar_width = 50, std::ostream& os = std::cout, bool on_middle = false) 
 	{
         if (fraction < 0) fraction = 0;
         if (fraction > 1) fraction = 1;
         int filled = static_cast<int>(fraction * bar_width);
-        os << "\r[";
-        for (int i = 0; i < bar_width; ++i) 
+        std::string bar(bar_width, ' ');
+        for (int i = 0; i < filled; ++i)
 		{
-            os << (i < filled ? '#' : ' ');
+            bar[i] = '#';
         }
-        os << "] " << static_cast<int>(fraction * 100) << "%";
+        std::string percent = std::to_string(static_cast<int>(fraction * 100)) + "%";
+        int percent_len = static_cast<int>(percent.length());
+
+        if (on_middle) 
+		{
+            int start = (bar_width - percent_len) / 2;
+            if (start < 0) start = 0;
+            for (int i = 0; i < percent_len && start + i < bar_width; ++i) {
+                bar[start + i] = percent[i];
+            }
+        }
+
+        os << "\r[" << bar << "] ";
+        if (!on_middle) os << percent;
         if (fraction >= 1.0) os << '\n';
         os.flush();
     }
@@ -247,5 +261,6 @@ namespace ctrl
     inline const std::string YELLOW = set_color(33);
     inline const std::string RESET = set_color(0);
 }
+
 //end
 #endif

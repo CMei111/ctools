@@ -11,6 +11,7 @@ A single-header, cross-platform C++ utility library for terminal manipulation, m
 - 🔢 **Math Helpers**: `is_prime`, `is_even`, `Max/Min`, and constants (PI, E).
 - 🔄 **Efficient Swap**: Move-aware `Swap` implementation.
 - 📦 **Header-only**: Just `#include "ctools.hpp"` and go.
+- 📊 **Progress Bar**: Console Progressbar!
 
 ## 📦 Version
 **Current:** `Indev 26.8_02` (API subject to breaking changes).  
@@ -28,10 +29,10 @@ int main() {
 }
 ```
 
-📋 Requirements
+## 📋 Requirements
 C++11 (or higher)
 
 Cross-platform: Linux (bash/terminal) & Windows (PowerShell / Windows Terminal)
 
-📜 License
+## 📜 License
 Distributed under the MIT License.
