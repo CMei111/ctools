@@ -25,16 +25,17 @@ Author Tips:
 #include <string>
 
 #ifdef _WIN32
-	#include <windows.h>
+    #include <conio.h>
+    #include <windows.h>
 #else
-	#include <unistd.h>
-	#include <termios.h>
+    #include <unistd.h>
+    #include <termios.h>
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.8_04"
+#define CTOOLS_VERSION_STRING "Indev 26.8_05"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x0804
+#define CTOOLS_VERSION_PATCH 0x0805
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
 
 // const
@@ -248,6 +249,47 @@ namespace ctools
 		}
 		return str;
 	}
+	inline char get_keypress() 
+	{
+		#ifdef _WIN32
+				return _getch();
+		#else
+				struct termios oldt, newt;
+				tcgetattr(STDIN_FILENO, &oldt);
+				newt = oldt;
+				newt.c_lflag &= ~(ICANON | ECHO);
+				tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+				char ch = getchar();
+				tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+				return ch;
+		#endif
+    }
+    int choice(const std::vector<std::string>& opt, std::string message = "Enter Your Choice:") 
+	{
+        for (size_t i = 0; i < opt.size(); ++i) 
+		{
+            std::cout << "[" << i + 1 << "] " << opt[i] << '\n';
+        }
+
+        while (true) 
+		{
+            std::cout << message << "[ ]" << '\b';
+            std::cout.flush();
+
+            char c = get_keypress();
+            std::cout << c << '\n';
+            if (c >= '1' && c <= '9') 
+			{
+                int idx = c - '1';
+                if (idx < static_cast<int>(opt.size())) 
+				{
+                    return idx;
+                }
+            }
+            // 无效输入：发出蜂鸣提示，重新循环
+            std::cout << '\a';
+        }
+    }
 	//Never call it in production environment
 	int crash_memory()
 	{

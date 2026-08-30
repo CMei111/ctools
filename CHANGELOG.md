@@ -43,6 +43,15 @@ Tips:editon string:`<Year><Mouth>_<Version Number>[-EF<Hot Fix Version Number>|-
 toggle_case(std::string str, letters_class to_letter_class)
 ``` 
 
-### Known Issues
+## [Indev 26.8_05] - 2026-08-30
+### Added
+- Add a choice() function.Call it will show a choice pancel.
+- Add a get_keypress function.It will return pressed key's ASCII code.
+```cpp
+inline char get_keypress()
+int choice(const std::vector<std::string>& opt, std::string message = "Enter Your Choice:")
+```
+
+## Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.
 - `openshell` only works with default terminal paths (bash/powershell).
