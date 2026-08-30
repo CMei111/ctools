@@ -1,7 +1,7 @@
 # ctools.hpp - Lightweight C++ Utility Headers
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-Indev_26.8_03-blue)](.)
+[![Version](https://img.shields.io/badge/version-Indev_26.8__04-blue)](.)
 
 **Status: 🚧 Experimental / Indev**  
 A single-header, cross-platform C++ utility library for terminal manipulation, math constants, and basic algorithms.
@@ -14,7 +14,7 @@ A single-header, cross-platform C++ utility library for terminal manipulation, m
 - 📊 **Progress Bar**: Terminal progress bar for long-running loops.
 
 ## 📦 Version
-**Current:** `Indev 26.8_03` (API subject to breaking changes).  
+**Current:** `Indev 26.8_04` (API subject to breaking changes).  
 Check [CHANGELOG.md](./CHANGELOG.md) for details.
 
 ## 🚀 Quick Start

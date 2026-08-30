@@ -1,5 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+Tips:editon string:`<Year><Mouth>_<Version Number>[-EF<Hot Fix Version Number>|-SUB<Sub Version Number>]`
 
 ## [Indev 26.8_01] - 2026-08-26
 ### Added
@@ -12,12 +13,35 @@ All notable changes to this project will be documented in this file.
 - Version macro: `CMEI_HEAD_FILE_VERSION` (`Indev 26.8_01`).
 
 ## [Indev 26.8_02] - 2026-08-28
+### Changed
 - Update version, opensource to Github.
 - Rename function `cmei_version_string()` to `version_string()`.
+### Added
+- Add a Console progress bar function print_progress_bar
 
 ## [Indev 26.8_03] - 2026-08-29
+### Changed
 - Changed function `print_progress_bar()`
-- emm.
+
+## [Indev 26.8_03-EF1]
+### Fixed
+- Fix README.md's version number bug.
+
+## [Indev 26.8_03-EF2]
+### Fixed
+- Fix README.md's version badge bug.
+
+## [Indev 26.8_03-SUB1]
+### Changed
+- Changed CHANGLOG.md.
+
+## [Indev 26.8_04] - 2026-08-30
+### Added
+- Add WIN_LF and PLATFORM_LF
+- Add a toggle_case() function.It can case reversal!Like This:
+```cpp
+toggle_case(std::string str, letters_class to_letter_class)
+``` 
 
 ### Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.

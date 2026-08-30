@@ -21,16 +21,20 @@ Author Tips:
 #include <cstddef>
 #include <type_traits>
 #include <cstdlib>
+#include <vector>
 #include <string>
 
 #ifdef _WIN32
 	#include <windows.h>
+#else
+	#include <unistd.h>
+	#include <termios.h>
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.8_02"
+#define CTOOLS_VERSION_STRING "Indev 26.8_04"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x0802
+#define CTOOLS_VERSION_PATCH 0x0804
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
 
 // const
@@ -46,6 +50,12 @@ namespace cconst
 //function
 namespace ctools
 {
+	enum letters_class 
+	{
+		LOWER = 1,
+		UPPER = 2,
+		UNKNOW = 0
+	};
 	namespace 
 	{
 		int never_stop()
@@ -217,6 +227,27 @@ namespace ctools
         if (fraction >= 1.0) os << '\n';
         os.flush();
     }
+	std::string toggle_case(std::string str, letters_class to_letter_class)
+	{
+		int l = str.length();
+		if(to_letter_class == letters_class::LOWER)
+		{
+			for(int i = 0;i < l;i++)
+			{
+				char a = str[i];
+				if(a >= 'A' && a <= 'Z') str[i] += 32;
+			}
+		}
+		else if(to_letter_class == letters_class::UPPER)
+		{
+			for(int i = 0;i < l;i++)
+			{
+				char a = str[i];
+				if(a >= 'a' && a <= 'z') str[i] -= 32;
+			}
+		}
+		return str;
+	}
 	//Never call it in production environment
 	int crash_memory()
 	{
@@ -260,6 +291,12 @@ namespace ctrl
     inline const std::string GREEN = set_color(32);
     inline const std::string YELLOW = set_color(33);
     inline const std::string RESET = set_color(0);
+	inline const std::string WIN_LF = "\r\n";
+	#ifdef _WIN32
+		inline const std::string PLATFORM_LF = "\r\n";
+	#else
+		inline const std::string PLATFORM_LF = "\n";
+	#endif
 }
 
 //end
