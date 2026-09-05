@@ -1,7 +1,7 @@
 # ctools.hpp - Lightweight C++ Utility Headers
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-Indev_26.8__05-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-Indev_26.8__06-blue)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/Status-Indev-yellow)](.)
 
 **Status: 🚧 Experimental / Indev**  
@@ -13,9 +13,10 @@ A single-header, cross-platform C++ utility library for terminal manipulation, m
 - 🔄 **Efficient Swap**: Move-aware `Swap` implementation.
 - 📦 **Header-only**: Just `#include "ctools.hpp"` and go.
 - 📊 **Progress Bar**: Terminal progress bar for long-running loops.
+- 🎲 **Random String**: 
 
 ## 📦 Version
-**Current:** `Indev 26.8_05` (API subject to breaking changes).  
+**Current:** `Indev 26.8_06` (API subject to breaking changes).  
 Check [CHANGELOG.md](./CHANGELOG.md) for details.
 
 ## 🚀 Quick Start
@@ -31,9 +32,9 @@ int main()
 ```
 
 ## 📋 Requirements
-C++11 (or higher)
+### C++11 (or higher)
 
-Cross-platform: Linux (bash/terminal) & Windows (PowerShell / Windows Terminal)
+### Cross-platform: Linux (bash/terminal) & Windows (PowerShell / Windows Terminal)
 
 ## 📜 License
-Distributed under the MIT License.
+### Distributed under the **MIT** License.

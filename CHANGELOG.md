@@ -52,6 +52,12 @@ inline char get_keypress()
 int choice(const std::vector<std::string>& opt, std::string message = "Enter Your Choice:")
 ```
 
+## [Indev 26.8_06] - 2026-09-05
+### Added
+- Add a random_string function.It can make a string at random.
+- Add a ascii_code can trun `int` to `char`.
+- Add a get_ascii_code can trun `char` to `int`.
+
 ## Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.
 - `openshell` only works with default terminal paths (bash/powershell).

@@ -23,6 +23,8 @@ Author Tips:
 #include <cstdlib>
 #include <vector>
 #include <string>
+#include <ctime>
+#include <random>
 
 #ifdef _WIN32
     #include <conio.h>
@@ -286,9 +288,47 @@ namespace ctools
                     return idx;
                 }
             }
-            // 无效输入：发出蜂鸣提示，重新循环
             std::cout << '\a';
         }
+	}
+	char inline ascii_code(const int code) noexcept
+	{
+		return char(code);
+	}
+	int inline get_ascii_code(const char c) noexcept
+	{
+		return int(c);
+	}
+	inline std::string random_string(int length) 
+	{
+        static const char charset[] =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        static std::uniform_int_distribution<> dis(0, sizeof(charset) - 2);
+
+        std::string result;
+        result.reserve(length);
+        for (int i = 0; i < length; ++i) 
+		{
+            result += charset[dis(gen)];
+        }
+        return result;
+    }
+    inline std::string random_string(int length, const std::string& charset) 
+	{
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, charset.size() - 1);
+
+        std::string result;
+        result.reserve(length);
+        for (int i = 0; i < length; ++i) 
+		{
+            result += charset[dis(gen)];
+        }
+        return result;
     }
 	//Never call it in production environment
 	int crash_memory()
