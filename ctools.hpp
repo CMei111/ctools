@@ -25,6 +25,7 @@ Author Tips:
 #include <string>
 #include <ctime>
 #include <random>
+#include "lib/basic.hpp"
 
 #ifdef _WIN32
     #include <conio.h>
@@ -34,10 +35,10 @@ Author Tips:
     #include <termios.h>
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.8_05"
+#define CTOOLS_VERSION_STRING "Indev 26.9_01"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x0805
+#define CTOOLS_VERSION_PATCH 0x0901
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
 
 // const
@@ -48,6 +49,8 @@ namespace cconst
 	constexpr double DEG_TO_RAD = PI / 180.0;
 	constexpr char UPPER_ALPHABET[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	constexpr char LOWER_ALPHABET[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+	inline constexpr char charset[] =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 }
 
 //function
@@ -273,7 +276,7 @@ namespace ctools
             std::cout << "[" << i + 1 << "] " << opt[i] << '\n';
         }
 
-        while (true) 
+        while(true) 
 		{
             std::cout << message << "[ ]" << '\b';
             std::cout.flush();
@@ -288,31 +291,33 @@ namespace ctools
                     return idx;
                 }
             }
-            std::cout << '\a';
+            std::cout << "\a";
         }
 	}
-	char inline ascii_code(const int code) noexcept
+	inline char ascii_code(const int code) noexcept
 	{
 		return char(code);
 	}
-	int inline get_ascii_code(const char c) noexcept
+	inline int get_ascii_code(const char c) noexcept
 	{
 		return int(c);
 	}
+	inline void pause(const std::string &message = "Press any key to continue...")
+	{
+		std::cout << message;
+		get_keypress();
+	}
 	inline std::string random_string(int length) 
 	{
-        static const char charset[] =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
         static std::random_device rd;
         static std::mt19937 gen(rd());
-        static std::uniform_int_distribution<> dis(0, sizeof(charset) - 2);
+        static std::uniform_int_distribution<> dis(0, sizeof(cconst::charset) - 2);
 
         std::string result;
         result.reserve(length);
         for (int i = 0; i < length; ++i) 
 		{
-            result += charset[dis(gen)];
+            result += cconst::charset[dis(gen)];
         }
         return result;
     }
@@ -381,5 +386,7 @@ namespace ctrl
 	#endif
 }
 
+
 //end
+#define CTOOLS_READY 1
 #endif

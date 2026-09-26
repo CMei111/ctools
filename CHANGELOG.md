@@ -58,6 +58,16 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 - Add a ascii_code can trun `int` to `char`.
 - Add a get_ascii_code can trun `char` to `int`.
 
-## Known Issues
+## [Indev 26.9_01] - 2026-09-26
+### Added
+- Added `cconst::charset` constant for default random character generation.
+- Added `random_string()` function with default and custom charset overloads.
+- Added `ascii_code()` and `get_ascii_code()` for ASCII conversion.
+- Added `pause()` function for console interaction.
+- Split basic terminal functions (`get_keypress`, `throw_err`) into `lib/basic.hpp`.
+### Changed
+- Bumped version to `Indev 26.9_01`. 
+
+# Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.
 - `openshell` only works with default terminal paths (bash/powershell).
