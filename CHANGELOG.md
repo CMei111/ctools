@@ -66,7 +66,14 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 - Added `pause()` function for console interaction.
 - Split basic terminal functions (`get_keypress`, `throw_err`) into `lib/basic.hpp`.
 ### Changed
-- Bumped version to `Indev 26.9_01`. 
+- Bumped version to `Indev 26.9_01`.
+
+### [Indev 26.9_02] - 2026-09-27
+### Added
+- Added `sleep()` function.It can let program sleep.
+- Added `cppio_optimise()` function.It will optimise (or unoptimise) C++ I/O speed.
+- Added `cppio_tied()` function.It can return current C++ input tied to.
+
 
 # Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.

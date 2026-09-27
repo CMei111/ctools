@@ -335,13 +335,38 @@ namespace ctools
         }
         return result;
     }
+	void sleep(int ms)
+	{
+		#ifdef _WIN32
+			Sleep(ms);
+		#else
+			usleep(ms * 1000);
+		#endif
+	}
+	void cppio_optimise(bool undo_or_do = 1)
+	{
+		if(undo_or_do)
+		{
+			std::cin.tie(nullptr);
+			std::ios::sync_with_stdio(false);
+		}
+		else
+		{
+			std::cin.tie(&std::cout);
+			std::ios::sync_with_stdio(true);
+		}
+	}
+	inline std::ostream* cppio_tied() noexcept
+	{
+		return std::cin.tie();
+	}
 	//Never call it in production environment
 	int crash_memory()
 	{
 		std::cout << "Crash......\r";
 		return never_stop();
 	}
-	inline const char* version_string()
+	inline const char* version_string() noexcept
 	{
 		return CTOOLS_VERSION_STRING;
 	}
