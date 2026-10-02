@@ -1,0 +1,6 @@
+
+// ⚠️ 发版前必须同步修改以下 4 处：
+// 1. CTOOLS_VERSION_STRING
+// 2. CTOOLS_VERSION_PATCH
+// 3. CHANGELOG.md 顶部
+// 4. README.md 徽章

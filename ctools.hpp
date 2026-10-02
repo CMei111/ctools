@@ -1,4 +1,4 @@
-/**
+/*
 Author Tips:
 	1.\033(\x1b,\x1B)model only can running on UNIX-like system,
 	or the Windows Terminal program.
@@ -7,7 +7,6 @@ Author Tips:
 
 		Thanks For Using!
 
-															*#Last Edit On 08/29/2026#*
 
 
 	Open Source : MIT
@@ -35,10 +34,20 @@ Author Tips:
     #include <termios.h>
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.9_01"
+#ifdef _MSVC_LANG
+	#define COMPILE_STD _MSVC_LANG
+#else
+	#define COMPILE_STD __cplusplus
+#endif
+
+#if COMPILE_STD < 201703L
+    #error "ctools requires C++17 or higher. Please add -std=c++17 to your compiler options or update your compiler."
+#endif
+
+#define CTOOLS_VERSION_STRING "Indev 26.9_03"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x0901
+#define CTOOLS_VERSION_PATCH 0x0903
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
 
 // const
@@ -56,18 +65,14 @@ namespace cconst
 //function
 namespace ctools
 {
-	enum letters_class 
+	namespace enums
 	{
-		LOWER = 1,
-		UPPER = 2,
-		UNKNOW = 0
-	};
-	namespace 
-	{
-		int never_stop()
+		enum letters_class 
 		{
-			return never_stop();
-		}
+			LOWER = 1,
+			UPPER = 2,
+			UNKNOW = 0
+		};
 	}
 	template <typename Type>
 	void Swap(Type &a, Type &b) noexcept(std::is_nothrow_move_constructible<Type>::value && std::is_nothrow_move_assignable<Type>::value)
@@ -233,10 +238,10 @@ namespace ctools
         if (fraction >= 1.0) os << '\n';
         os.flush();
     }
-	std::string toggle_case(std::string str, letters_class to_letter_class)
+	std::string toggle_case(std::string str, enums::letters_class to_letter_class)
 	{
 		int l = str.length();
-		if(to_letter_class == letters_class::LOWER)
+		if(to_letter_class == enums::letters_class::LOWER)
 		{
 			for(int i = 0;i < l;i++)
 			{
@@ -244,7 +249,7 @@ namespace ctools
 				if(a >= 'A' && a <= 'Z') str[i] += 32;
 			}
 		}
-		else if(to_letter_class == letters_class::UPPER)
+		else if(to_letter_class == enums::letters_class::UPPER)
 		{
 			for(int i = 0;i < l;i++)
 			{
@@ -343,6 +348,34 @@ namespace ctools
 			usleep(ms * 1000);
 		#endif
 	}
+	template <typename T>
+	T* create_object()
+	{
+		T *p = new T;
+		return p;
+	}
+	template <typename T>
+	T* initialized_object()
+	{
+		T *p = new T();
+		return p;
+	}
+	template <typename T>
+	void del_ptr(T *p)
+	{
+		delete p;
+	}
+	template <typename T>
+	void set_nullptr(T* &p)
+	{
+		p = nullptr;
+	}
+	template <typename T>
+	void set_null_and_del(T* &p)
+	{
+		delete p;
+		p = nullptr;
+	}
 	void cppio_optimise(bool undo_or_do = 1)
 	{
 		if(undo_or_do)
@@ -360,11 +393,9 @@ namespace ctools
 	{
 		return std::cin.tie();
 	}
-	//Never call it in production environment
-	int crash_memory()
+	long get_cpp_version() noexcept
 	{
-		std::cout << "Crash......\r";
-		return never_stop();
+		return __cplusplus;
 	}
 	inline const char* version_string() noexcept
 	{
@@ -375,7 +406,7 @@ namespace ctools
 //Ctrl
 namespace ctrl
 {
-	// Standard ASCII ctrl char 0x00~0x1F + 0x7F
+	// Standard ASCII ctrl char 0x00~0x1F + 0x7F, 0x1B
     inline constexpr char NUL = '\x00';
     inline constexpr char SOH = '\x01';
     inline constexpr char STX = '\x02';

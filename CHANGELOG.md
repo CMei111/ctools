@@ -68,11 +68,26 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 ### Changed
 - Bumped version to `Indev 26.9_01`.
 
-### [Indev 26.9_02] - 2026-09-27
+## [Indev 26.9_02] - 2026-09-27
 ### Added
 - Added `sleep()` function.It can let program sleep.
 - Added `cppio_optimise()` function.It will optimise (or unoptimise) C++ I/O speed.
 - Added `cppio_tied()` function.It can return current C++ input tied to.
+
+## [Indev 26.9_03] - 2026-10-2
+### Added
+- Added `create_object` function to create object.
+- Added `initialized_object` function to create and initialize object.
+- Added `del_ptr` function to delete pointer.
+- Added `set_nullptr` function to set a a pointer null.
+- Added `set_null_and_del` function to delete and set pointer null.
+**WARNING! There are template functions!**
+### Changed
+- Deleted function `crash_memory` and `never_stop`.
+- Moved enums to namespace `ctools::enums::`
+
+### Fixed
+- now programs below C++ 17 standard can't be compiled.
 
 
 # Known Issues
