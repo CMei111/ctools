@@ -86,6 +86,21 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 - Deleted function `crash_memory` and `never_stop`.
 - Moved enums to namespace `ctools::enums::`
 
+## [Indev 26.10.01] - 2026-10-17
+### Added
+- Added `COMPILE_PLATFORM` macro. It evaluates to an integer value (1:GCC, 2:Clang, 3:MSVC, 0:Other).
+- Added function `sqrt` to calculate the square root of a number.
+- Added function `noop` (no operation), which does nothing.
+- Added class `auto_ptr` for automatic object deletion and RAII memory management.
+- Added function `arrvalue_cnt` to return the number of elements in an array.
+- Applied the `[[deprecated]]` attribute to `Classic_swap`.
+- Added enum `bswitch` to indicate switch states.
+- Added enum `power_state` to indicate power states.
+### Changed
+- Renamed function `Swap` to `swap`.
+- Renamed function `Max` to `max`.
+- Renamed function `Min` to `min`.
+
 ### Fixed
 - now programs below C++ 17 standard can't be compiled.
 

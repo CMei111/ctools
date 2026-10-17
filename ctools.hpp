@@ -13,6 +13,7 @@ Author Tips:
 */
 
 //head
+#pragma once
 #ifndef CMEI_TOOLS_H
 #define CMEI_TOOLS_H
 #include <utility>
@@ -40,14 +41,25 @@ Author Tips:
 	#define COMPILE_STD __cplusplus
 #endif
 
+#if defined(__clang__)
+	#define COMPILE_PLATFORM 2
+#elif defined(__GNUC__)
+	#define COMPILE_PLATFORM 1
+#elif defined(_MSC_VER)
+	#define COMPILE_PLATFORM 3
+#else
+	#define COMPILE_PLATFORM 0
+#endif
+
+
 #if COMPILE_STD < 201703L
     #error "ctools requires C++17 or higher. Please add -std=c++17 to your compiler options or update your compiler."
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.9_03"
+#define CTOOLS_VERSION_STRING "Indev 26.10_01"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x0903
+#define CTOOLS_VERSION_PATCH 0x1001
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
 
 // const
@@ -67,24 +79,33 @@ namespace ctools
 {
 	namespace enums
 	{
-		enum letters_class 
+		enum class letters_class 
 		{
 			LOWER = 1,
 			UPPER = 2,
 			UNKNOW = 0
 		};
+		enum class bswitch : bool
+		{
+			ON = true,
+			OFF = false
+		};
+		enum class power_state : unsigned char 
+		{
+			ON,
+			OFF,
+			STANDBY
+		};
 	}
 	template <typename Type>
-	void Swap(Type &a, Type &b) noexcept(std::is_nothrow_move_constructible<Type>::value && std::is_nothrow_move_assignable<Type>::value)
+	void swap(Type &a, Type &b) noexcept(std::is_nothrow_move_constructible<Type>::value && std::is_nothrow_move_assignable<Type>::value)
 	{
 		Type temp = std::move(a);
 	    a = std::move(b);
         b = std::move(temp);
 	}
-	/**
-	 * @discouraged :it to slow!Please using Swap() 
-	 */
 	template <typename Type>
+	[[deprecated("It too slow!Please using swap()")]] 
 	void Classic_Swap(Type &a, Type &b) noexcept
 	{
 		Type temp = a;
@@ -184,18 +205,14 @@ namespace ctools
     	return n % 2 == 0;
     }
     template <typename Type>
-    Type Max(const Type &a, const Type &b) noexcept
+    Type max(const Type &a, const Type &b) noexcept
     {
-    	if(a > b) return a;
-    	else if(b > a) return b;
-    	else return a;
+    	return a > b? a:b;
     }
     template <typename Type>
-    Type Min(const Type &a, const Type &b) noexcept
+    Type min(const Type &a, const Type &b) noexcept
     {
-    	if(a < b) return a;
-    	else if(b < a) return b;
-    	else return a;
+		return a < b? a:b;
 	}
 	bool is_prime(long long n) noexcept
 	{
@@ -238,6 +255,19 @@ namespace ctools
         if (fraction >= 1.0) os << '\n';
         os.flush();
     }
+	[[nodiscard]] double sqrt(double obj)
+	{
+		if (obj < 0) return -1.0;
+		if (obj == 0) return 0.0;
+		double x = obj;
+		double last = 0.0;
+		while (x != last) 
+		{
+			last = x;
+			x = (x + obj / x) / 2.0;
+		}
+		return x;
+	}
 	std::string toggle_case(std::string str, enums::letters_class to_letter_class)
 	{
 		int l = str.length();
@@ -259,10 +289,12 @@ namespace ctools
 		}
 		return str;
 	}
-	inline char get_keypress() 
+	inline char get_keypress(bool re_show = false) 
 	{
 		#ifdef _WIN32
-				return _getch();
+				char tmp = _getch();
+				if(re_show) std::cout << tmp;
+				return tmp;
 		#else
 				struct termios oldt, newt;
 				tcgetattr(STDIN_FILENO, &oldt);
@@ -271,6 +303,7 @@ namespace ctools
 				tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 				char ch = getchar();
 				tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+				if(re_show) std::cout << ch;
 				return ch;
 		#endif
     }
@@ -357,7 +390,7 @@ namespace ctools
 	template <typename T>
 	T* initialized_object()
 	{
-		T *p = new T();
+		T *p = new T{};
 		return p;
 	}
 	template <typename T>
@@ -389,18 +422,89 @@ namespace ctools
 			std::ios::sync_with_stdio(true);
 		}
 	}
+	[[noreturn]] void fatal(const char *message, const int code = 1, const bool color = 0)
+	{
+		if(color) std::cerr << "\033[31m";
+		if(message == nullptr)
+		{
+			std::cerr << "SEVERE LOGIC ERROR:\n\tIn function fatal(), parameter" 
+				<< "message cannot a null pointer!";
+			if(color) std::cerr << "\033[0m";
+			std::cerr.flush();
+			abort();
+		}
+		std::cerr << "fatal:\n\t" << message << "\nError code:"
+			<< std::hex << std::showbase << code << std::dec << std::noshowbase
+			<< '(' << code << ')';
+		if(color) std::cerr << "\033[0m";
+		std::cerr.flush();
+		abort();
+	}
+	template <typename Type>
+	class auto_ptr
+	{
+	private:
+		Type* data;
+	public:
+		explicit auto_ptr(Type* init = nullptr) noexcept : data(init) {}
+		~auto_ptr() 
+		{
+			delete data;
+		}
+		auto_ptr(const auto_ptr&) = delete;
+		auto_ptr& operator=(const auto_ptr&) = delete;
+		auto_ptr(auto_ptr&& other) noexcept : data(other.data)
+		{
+			other.data = nullptr;
+		}
+		auto_ptr& operator=(auto_ptr&& other) noexcept 
+		{
+			if (this != &other) {
+				delete data;
+				data = other.data;
+				other.data = nullptr;
+			}
+			return *this;
+		}
+		Type& operator*() { return *data; }
+		const Type& operator*() const { return *data; }
+		Type* operator->() { return data; }
+		const Type* operator->() const { return data; }
+		Type* get() const noexcept { return data; }
+		Type* release() noexcept 
+		{
+			Type* tmp = data;
+			data = nullptr;
+			return tmp;
+		}
+		void reset(Type* p = nullptr) noexcept 
+		{
+			if (data != p) 
+			{
+				delete data;
+				data = p;
+			}
+		}
+		explicit operator bool() const noexcept { return data != nullptr; }
+	};
+	template <typename Type, std::size_t N>
+	inline constexpr std::size_t arrvalue_cnt(const Type (&)[N]) noexcept
+	{
+		return N;
+	}
 	inline std::ostream* cppio_tied() noexcept
 	{
 		return std::cin.tie();
 	}
-	long get_cpp_version() noexcept
+	inline long cpp_version() noexcept
 	{
-		return __cplusplus;
+		return COMPILE_STD;
 	}
 	inline const char* version_string() noexcept
 	{
 		return CTOOLS_VERSION_STRING;
 	}
+	inline void noop() noexcept {}
 }
 
 //Ctrl
@@ -425,7 +529,7 @@ namespace ctrl
     inline constexpr char SI  = '\x0F';
     inline constexpr char DEL = '\x7F';
 	inline constexpr char COLOR_CTRL = '\x1B';
-	//WARNING! Windows CMD will can't use ASCII \x1b char!Pleace use system("color ..."); 
+	//WARNING! Windows CMD can't use ASCII \x1b char! Pleace use system("color ..."); 
 	inline std::string set_color(int code) 
 	{
     	return std::string(1, COLOR_CTRL) + "[" + std::to_string(code) + "m";
@@ -441,6 +545,7 @@ namespace ctrl
 		inline const std::string PLATFORM_LF = "\n";
 	#endif
 }
+
 
 
 //end

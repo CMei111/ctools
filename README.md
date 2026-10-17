@@ -1,7 +1,7 @@
 # ctools.hpp - Lightweight C++ Utility Headers
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-Indev_26.9__03-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-Indev_26.10__01-blue)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/Status-Indev-yellow)](./)
 
 **Status: 🚧 Experimental / Indev**  
@@ -16,7 +16,7 @@ A single-header, cross-platform C++ utility library for terminal manipulation, m
 - 🎲 **Random String**: random 100~1:$1\%$ to all numbers
 
 ## 📦 Version
-**Current:** `Indev 26.9_03` (API subject to breaking changes).  
+**Current:** `Indev 26.10_01` (API subject to breaking changes).  
 Check [CHANGELOG.md](./CHANGELOG.md) for details.
 
 ## 🚀 Quick Start
@@ -32,8 +32,10 @@ int main()
 ```
 
 ## 📋 Requirements
-### C++11 (or higher)
+### C++17 (or higher)
 Cross-platform: Linux (bash/terminal) & Windows (PowerShell / Windows Terminal)
+> Tips
+> ctools always need C++ 17! Some old version\'s will show \"C++ 11\", but it a bug.
 
 ## 📜 License
 Distributed under the **MIT** License.
