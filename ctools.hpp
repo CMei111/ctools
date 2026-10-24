@@ -14,8 +14,8 @@ Author Tips:
 
 //head
 #pragma once
-#ifndef CMEI_TOOLS_H
-#define CMEI_TOOLS_H
+#ifndef CMEI_CTOOLS_HPP
+#define CMEI_CTOOLS_HPP
 #include <utility>
 #include <iostream>
 #include <cstddef>
@@ -56,18 +56,19 @@ Author Tips:
     #error "ctools requires C++17 or higher. Please add -std=c++17 to your compiler options or update your compiler."
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.10_01"
+#define CTOOLS_VERSION_STRING "Indev 26.10_02"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x1001
+#define CTOOLS_VERSION_PATCH 0x1002
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
+#define MAKE_ERROR(code, msg) ctools::error(code, msg, __FILE__, __LINE__)
 
 // const
 namespace cconst
 {
-	constexpr double PI = 3.1415926535897932384626433832795;
-	constexpr double E = 2.7182818284590452353602874713527;
-	constexpr double DEG_TO_RAD = PI / 180.0;
+	constexpr long double PI = 3.1415926535897932384626433832795L;
+	constexpr long double E = 2.7182818284590452353602874713527L;
+	constexpr long double DEG_TO_RAD = PI / 180.0;
 	constexpr char UPPER_ALPHABET[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	constexpr char LOWER_ALPHABET[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 	inline constexpr char charset[] =
@@ -77,9 +78,26 @@ namespace cconst
 //function
 namespace ctools
 {
+	enum class errors : unsigned int
+	{
+		SUCCESS = 0x0,
+		GENERAL = 0x1,
+		NULLPTR_ERR = 0x2,
+		FILE_IO = 0x3,
+		OUT_OF_MEM = 0x4,
+		INVALID_OPERATION = 0x5,
+		SEGFAULT = 0x6,
+		TLE = 0x7,
+		UNDEFINE = 0x8,
+		INVALID_TYPE = 0x9,
+		RE = 0xA,
+		ABORTED = 0xB,
+		OOB = 0xC,
+		TERMINATED = 0xD
+	};
 	namespace enums
 	{
-		enum class letters_class 
+		enum class letters_class : unsigned char
 		{
 			LOWER = 1,
 			UPPER = 2,
@@ -96,6 +114,31 @@ namespace ctools
 			OFF,
 			STANDBY
 		};
+	}
+	struct error
+	{
+		errors error_value = errors::GENERAL;
+	};
+	inline const char* error_to_string(errors code) noexcept
+	{
+		switch (code) 
+		{
+			case errors::SUCCESS:            return "SUCCESS";
+			case errors::GENERAL:            return "GENERAL_ERROR";
+			case errors::NULLPTR_ERR:        return "NULL_POINTER";
+			case errors::FILE_IO:            return "FILE_IO_ERROR";
+			case errors::OUT_OF_MEM:         return "OUT_OF_MEMORY";
+			case errors::INVALID_OPERATION:  return "INVALID_OPERATION";
+			case errors::SEGFAULT:           return "SEGMENTATION_FAULT";
+			case errors::TLE:                return "TIME_LIMIT_EXCEEDED";
+			case errors::UNDEFINE:           return "UNDEFINED_ERROR";
+			case errors::INVALID_TYPE:       return "INVALID_TYPE";
+			case errors::RE:                 return "RUNTIME_ERROR";
+			case errors::ABORTED:            return "PROCESS_ABORTED";
+			case errors::OOB:                return "OUT OF BOUNDS";
+			case errors::TERMINATED:         return "TERMINATED";
+			default:                         return "UNKNOWN_ERROR";
+		}
 	}
 	template <typename Type>
 	void swap(Type &a, Type &b) noexcept(std::is_nothrow_move_constructible<Type>::value && std::is_nothrow_move_assignable<Type>::value)
@@ -487,6 +530,13 @@ namespace ctools
 		}
 		explicit operator bool() const noexcept { return data != nullptr; }
 	};
+	inline std::size_t strlen(const char a[])
+	{
+		if(a == nullptr) return 0;
+		std::size_t i = 0;
+		while(a[i] != '\0') i++;
+		return i;
+	}
 	template <typename Type, std::size_t N>
 	inline constexpr std::size_t arrvalue_cnt(const Type (&)[N]) noexcept
 	{
@@ -541,13 +591,14 @@ namespace ctrl
 	inline const std::string WIN_LF = "\r\n";
 	#ifdef _WIN32
 		inline const std::string PLATFORM_LF = "\r\n";
+		inline const char console_file[] = "CON";
+		inline const char null_device[] = "NUL";
 	#else
 		inline const std::string PLATFORM_LF = "\n";
+		inline const char console_file[] = "/dev/stdout";
+		inline const char null_device[] = "/dev/null";
 	#endif
 }
-
-
-
 //end
 #define CTOOLS_READY 1
 #endif

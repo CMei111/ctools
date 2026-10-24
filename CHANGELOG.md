@@ -73,6 +73,8 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 - Added `sleep()` function.It can let program sleep.
 - Added `cppio_optimise()` function.It will optimise (or unoptimise) C++ I/O speed.
 - Added `cppio_tied()` function.It can return current C++ input tied to.
+### Fixed
+- now programs below C++ 17 standard can't be compiled.
 
 ## [Indev 26.9_03] - 2026-10-2
 ### Added
@@ -83,8 +85,10 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 - Added `set_null_and_del` function to delete and set pointer null.
 **WARNING! There are template functions!**
 ### Changed
-- Deleted function `crash_memory` and `never_stop`.
-- Moved enums to namespace `ctools::enums::`
+- Moved enums to namespace `ctools::enums::`.
+### Removed
+- Removed function `crash_memory`.
+- Removed function `never_stop`.
 
 ## [Indev 26.10.01] - 2026-10-17
 ### Added
@@ -93,17 +97,25 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 - Added function `noop` (no operation), which does nothing.
 - Added class `auto_ptr` for automatic object deletion and RAII memory management.
 - Added function `arrvalue_cnt` to return the number of elements in an array.
-- Applied the `[[deprecated]]` attribute to `Classic_swap`.
 - Added enum `bswitch` to indicate switch states.
 - Added enum `power_state` to indicate power states.
 ### Changed
 - Renamed function `Swap` to `swap`.
 - Renamed function `Max` to `max`.
 - Renamed function `Min` to `min`.
-
 ### Fixed
-- now programs below C++ 17 standard can't be compiled.
+- Fixed an issue where function `cpp_version` always returned `199711L` (C++98) when compiled with MSVC, unless the `/Zc:__cplusplus` compiler flag was explicitly added.
+### Deprecated
+- Deprecated function `Classic_Swap`, because it too slow!
 
+## [Indev 26.10_02] - 2026-10-24
+### Added
+- Added function `strlen` to calculate length of a char array.
+- Added `ctools::errors` enumeration for standardized error handling across the library.
+- Added struct `error` to indicate a error.
+- Added platform-agnostic device paths: `console_file` and `null_device`.
+### Changed
+- Renamed the header guard macro from `CMEI_TOOLS_H` to `CMEI_CTOOLS_HPP` to match the file extension.
 
 # Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.
