@@ -1,6 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-Tips:editon string:`<Year><Mouth>_<Version Number>[-EF<Hot Fix Version Number>|-SUB<Sub Version Number>]`
+Tips:editon string:`<Indev | Alpha | Beta | None> <Year><Mouth>_<Version Number>[-EF<Hot Fix Version Number>|-SUB<Sub Version Number>]`
 
 ## [Indev 26.8_01] - 2026-08-26
 ### Added
@@ -116,6 +116,19 @@ int choice(const std::vector<std::string>& opt, std::string message = "Enter You
 - Added platform-agnostic device paths: `console_file` and `null_device`.
 ### Changed
 - Renamed the header guard macro from `CMEI_TOOLS_H` to `CMEI_CTOOLS_HPP` to match the file extension.
+
+## [Indev 26.11_01] - 2026-11-1
+### Added
+- From this version onwards, you can view this project on Gitcode.
+- Added function `type_case` to convert data type.
+- Added function `omit_space`. It will return a string value without space.
+- Added function `beep` to make a sound.
+- Added function `pow_int` to calculate a number\'s power.
+- Added function `pow` to auto choose use function `pow_int` or `std::pow`.
+- Added enum `operation_system` to indicate operation systems.
+- Added macro `COMPILETIME_SYSTEM`. It always equal to compiletime operating system.
+- Added class `advanced_event_system`.
+> **Important!** All this function `beep`\'s paramter only valid in Windows Platfrom.
 
 # Known Issues
 - Windows native CMD (not Terminal) does not support ANSI colors.

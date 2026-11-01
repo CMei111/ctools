@@ -25,6 +25,8 @@ Author Tips:
 #include <string>
 #include <ctime>
 #include <random>
+#include <functional>
+#include <unordered_map>
 #include "lib/basic.hpp"
 
 #ifdef _WIN32
@@ -42,24 +44,64 @@ Author Tips:
 #endif
 
 #if defined(__clang__)
-	#define COMPILE_PLATFORM 2
+	#define COMPILE_PLATFORM 2	// clang
 #elif defined(__GNUC__)
-	#define COMPILE_PLATFORM 1
+	#define COMPILE_PLATFORM 1	// gcc, g++
 #elif defined(_MSC_VER)
-	#define COMPILE_PLATFORM 3
+	#define COMPILE_PLATFORM 3	// MSVC
 #else
-	#define COMPILE_PLATFORM 0
+	#define COMPILE_PLATFORM 4	// other
 #endif
 
+namespace ctools::enums
+{
+	enum class operation_system : unsigned char
+	{
+		OTHER = 0,
+		WINDOWS_64 = 1,
+		WINDOWS_32 = 2,
+		LINUX = 3,
+		MACOS = 4,
+		IOS = 5,
+		APPLE_TV = 6,
+		APPLE_WATCH = 7,
+		APPLE_SIMULATOR = 8
+	};
+}
+
+#if defined(_WIN64)
+	#define COMPILETIME_SYSTEM ctools::enums::operation_system::WINDOWS_64
+#elif defined(_WIN32)
+	#define COMPILETIME_SYSTEM ctools::enums::operation_system::WINDOWS_32
+#elif defined(__linux__)
+	#define COMPILETIME_SYSTEM ctools::enums::operation_system::LINUX
+#elif defined(__APPLE__)
+	#include <TargetConditionals.h>
+	#if TARGET_OS_OSX
+		#define COMPILETIME_SYSTEM ctools::enums::operation_system::MACOS
+	#elif TARGET_OS_IOS
+		#define COMPILETIME_SYSTEM ctools::enums::operation_system::IOS
+	#elif TARGET_OS_TV
+		#define COMPILETIME_SYSTEM ctools::enums::operation_system::APPLE_TV
+	#elif TARGET_OS_WATCH
+		#define COMPILETIME_SYSTEM ctools::enums::operation_system::APPLE_WATCH
+	#elif TARGET_OS_SIMULATOR
+		#define COMPILETIME_SYSTEM ctools::enums::operation_system::APPLE_SIMULATOR
+	#else
+		#define COMPILETIME_SYSTEM ctools::enums::operation_system::OTHER
+	#endif
+#else
+	#define COMPILETIME_SYSTEM ctools::enums::operation_system::OTHER
+#endif
 
 #if COMPILE_STD < 201703L
     #error "ctools requires C++17 or higher. Please add -std=c++17 to your compiler options or update your compiler."
 #endif
 
-#define CTOOLS_VERSION_STRING "Indev 26.10_02"
+#define CTOOLS_VERSION_STRING "Indev 26.10_03"
 #define CTOOLS_VERSION_MAJOR 0
 #define CTOOLS_VERSION_MINOR 26
-#define CTOOLS_VERSION_PATCH 0x1002
+#define CTOOLS_VERSION_PATCH 0x1003
 #define CTOOLS_VERSION_HEX ((CTOOLS_VERSION_MAJOR << 16) | (CTOOLS_VERSION_MINOR << 8) | CTOOLS_VERSION_PATCH)
 #define MAKE_ERROR(code, msg) ctools::error(code, msg, __FILE__, __LINE__)
 
@@ -75,7 +117,7 @@ namespace cconst
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 }
 
-//function
+// main
 namespace ctools
 {
 	enum class errors : unsigned int
@@ -311,6 +353,29 @@ namespace ctools
 		}
 		return x;
 	}
+	[[nodiscard]] constexpr long long pow_int(long long base, unsigned int exp) noexcept
+	{
+		long long result = 1;
+		while (exp > 0) 
+		{
+			if (exp & 1) result *= base;
+			base *= base;
+			exp >>= 1;
+		}
+		return result;
+	}
+	template <typename T, typename U>
+    [[nodiscard]] auto pow(T base, U exp) noexcept
+    {
+        if constexpr (std::is_integral_v<T> && std::is_integral_v<U>) 
+		{
+            return pow_int(base, static_cast<unsigned int>(exp));
+        } 
+        else 
+		{
+            return std::pow(base, exp);
+        }
+	}
 	std::string toggle_case(std::string str, enums::letters_class to_letter_class)
 	{
 		int l = str.length();
@@ -537,6 +602,58 @@ namespace ctools
 		while(a[i] != '\0') i++;
 		return i;
 	}
+	template <typename... Args>
+	class advanced_event_system 
+	{
+		private:
+			std::unordered_map<std::string, std::vector<std::function<void(Args...)>>> triggers;
+		public:
+			void on(const std::string& trigger_name, std::function<void(Args...)> action)
+			{
+				triggers[trigger_name].push_back(action);
+			}
+
+			void emit(const std::string& trigger_name, Args... args) 
+			{
+				auto it = triggers.find(trigger_name);
+				if (it != triggers.end()) 
+				{
+					for (auto& action : it->second) 
+					{
+						action(args...);
+					}
+				}
+			}
+	};
+	std::string omit_space(const std::string &target)
+	{
+		std::string temp = "";
+		temp.reserve(target.length());
+		for(char c : target)
+		{
+			if(c != ' ') temp += c;
+		}
+		return temp;
+	}
+	inline void beep(unsigned int frequency = 800, unsigned int duration_ms = 200) 
+	{
+		#ifdef _WIN32
+			if (frequency >= 37 && frequency <= 32767 && duration_ms > 0) Beep(frequency, duration_ms);
+		#else
+			(void)frequency;
+			(void)duration_ms;
+			if (duration_ms > 0)
+			{
+				std::putchar('\a');
+				std::fflush(stdout);
+			}
+		#endif
+	}
+	template <typename TargetType, typename SourceType>
+	inline TargetType type_cast(SourceType&& from)
+	{
+		return static_cast<TargetType>(std::forward<SourceType>(from));
+	}
 	template <typename Type, std::size_t N>
 	inline constexpr std::size_t arrvalue_cnt(const Type (&)[N]) noexcept
 	{
@@ -600,5 +717,10 @@ namespace ctrl
 	#endif
 }
 //end
+
+// Indicate ctools is ready.
 #define CTOOLS_READY 1
+
+#pragma message("[OK] ctools load completed.")
+
 #endif

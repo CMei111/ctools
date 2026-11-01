@@ -1,9 +1,8 @@
 # ctools.hpp - Lightweight C++ Utility Headers
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-Indev_26.10__01-blue)](CHANGELOG.md)
-[![Status](https://img.shields.io/badge/Status-Indev-yellow)](./)
-
+[![Version](https://img.shields.io/badge/version-Indev_26.10__03-blue)](CHANGELOG.md)
+![Status](https://img.shields.io/badge/Status-Indev-yellow)  
 **Status: 🚧 Experimental / Indev**  
 A single-header, cross-platform C++ utility library for terminal manipulation, math constants, and basic algorithms.
 
@@ -13,10 +12,11 @@ A single-header, cross-platform C++ utility library for terminal manipulation, m
 - 🔄 **Efficient Swap**: Move-aware `Swap` implementation.
 - 📦 **Header-only**: Just `#include "ctools.hpp"` and go.
 - 📊 **Progress Bar**: Terminal progress bar for long-running loops.
-- 🎲 **Random String**: random 100~1:$1\%$ to all numbers
+- 🎲 **Random String**: random 100~1:$1\%$ to all numbers.
+> 🚀 **G++ First!** For the best experience, we highly recommend using the GNU Compiler (GCC/G++).
 
 ## 📦 Version
-**Current:** `Indev 26.10_01` (API subject to breaking changes).  
+**Current:** `Indev 26.10_03` (API subject to breaking changes).  
 Check [CHANGELOG.md](./CHANGELOG.md) for details.
 
 ## 🚀 Quick Start
@@ -34,8 +34,11 @@ int main()
 ## 📋 Requirements
 ### C++17 (or higher)
 Cross-platform: Linux (bash/terminal) & Windows (PowerShell / Windows Terminal)
-> Tips
+> ### Tips
 > ctools always need C++ 17! Some old version\'s will show \"C++ 11\", but it a bug.
 
 ## 📜 License
-Distributed under the **MIT** License.
+Distributed under the [MIT License](https://www.opensource.org/license/mit).
+
+## ❤️ Collaborator
+Not yet collaborator.
